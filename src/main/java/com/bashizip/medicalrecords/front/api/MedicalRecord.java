@@ -5,15 +5,11 @@
  */
 package com.bashizip.medicalrecords.front.api;
 
-
-
 /**
  *
  * @author Patrick
  */
-
 public class MedicalRecord {
-
 
     private String patientId;
     private String fname;
@@ -86,6 +82,11 @@ public class MedicalRecord {
 
     public void setLivingWithDiabete(String livingWithDiabete) {
         this.livingWithDiabete = livingWithDiabete;
+    }
+
+    @Override
+    public String toString() {
+        return fname + " " + lname + "(" + gender + ")," + age + " " + city + "-" + country;
     }
 
 }

@@ -23,7 +23,7 @@ import retrofit2.http.POST;
 public class MedicalRecService {
 
     private static Api api;
-    public static final String BASE_URL = "http://localhost:8484/api/1.0/emr/";
+    public static final String BASE_URL = "http://localhost:8484/api/1.0/";
 
     public static Api getApi() {
 
@@ -49,10 +49,10 @@ public class MedicalRecService {
     public interface Api {
         // Request method and URL specified in the annotation
 
-        @GET("medicalrecords")
+        @GET("emr")
         Call<List<MedicalRecord>> getAll();
 
-        @POST("medicalrecords")
+        @POST("emr")
         Call<MedicalRecord> createRecord(@Body MedicalRecord user);
     }
 
