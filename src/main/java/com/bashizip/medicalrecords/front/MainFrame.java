@@ -5,6 +5,14 @@
  */
 package com.bashizip.medicalrecords.front;
 
+import com.bashizip.medicalrecords.front.api.MedicalRecService;
+import com.bashizip.medicalrecords.front.api.MedicalRecord;
+import java.util.List;
+import javax.swing.DefaultListModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  *
  * @author Patrick
@@ -15,9 +23,54 @@ public class MainFrame extends javax.swing.JFrame {
      * Creates new form MainFrame
      */
     public MainFrame() {
+        setTitle("Medical Records");
+        setLocationRelativeTo(null);
         initComponents();
         buttonGroup1.add(rb_male);
         buttonGroup1.add(rb_famale);
+
+        loadRecords();
+    }
+
+    void loadRecords() {
+        MedicalRecService.getApi().getAll().enqueue(new Callback<List<MedicalRecord>>() {
+            @Override
+            public void onResponse(Call<List<MedicalRecord>> call, Response<List<MedicalRecord>> rspns) {
+
+                List<MedicalRecord> list = rspns.body();
+                final DefaultListModel model = new DefaultListModel();
+                for (MedicalRecord md : list) {
+                    model.addElement(md);
+                }
+
+                list_records.setModel(model);
+            }
+
+            @Override
+            public void onFailure(Call<List<MedicalRecord>> call, Throwable thrwbl) {
+            }
+        });
+    }
+
+    void createRecord() {
+        MedicalRecord md = new MedicalRecord();
+        md.setAge(Integer.valueOf(age.getText()));
+        md.setCity(city.getSelectedItem().toString());
+        md.setCountry(country.getSelectedItem().toString());
+        md.setFname(fname.getText());
+        String ld = "";
+        if (diab.isSelected()) {
+            ld = "Yes";
+        } else if (diab_no.isSelected()) {
+            ld = "No";
+        } else {
+            ld = "Unkown";
+        }
+        md.setLivingWithDiabete(ld);
+        md.setLname(laname.getText());
+        md.setGender(rb_male.isSelected() ? "M" : "F");
+        
+        MedicalRecService.getApi().createRecord(md);
     }
 
     /**
@@ -68,11 +121,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         rb_famale.setText("Female");
 
-        city.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        city.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kinshasa", "Goma", "Bukavu", "Kisangani" }));
 
         jLabel5.setText("City ");
 
-        country.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        country.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DR Congo" }));
 
         jLabel6.setText("Country");
 
